@@ -26,7 +26,7 @@ const UserLogout = () => {
             localStorage.removeItem('token');
             setTimeout(() => {
               navigate('/user-login');
-            }, 500); // Delay to ensure the animation finishes
+            }, 100); // Delay to ensure the animation finishes
           }
         });
       }
