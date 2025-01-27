@@ -8,7 +8,7 @@ import DriverContext from './context/DriverContext.jsx'
 import SocketContext from './context/SocketContext.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+ 
     
       <DriverContext>
         <UserContext>
@@ -20,5 +20,5 @@ createRoot(document.getElementById('root')).render(
         </UserContext>
       </DriverContext>
     
-  </StrictMode>,
+  
 )
