@@ -5,115 +5,157 @@ import { UserDataContext } from '../context/UserContext'
 
 
 const UserSignup = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [error, setError] = useState(""); // General Error State
+  const [passwordError, setPasswordError] = useState(""); // Password Error State
+  const [loading, setLoading] = useState(false); // Loading State
 
-     const [email, setEmail] = useState('')
-     const [password, setPassword] = useState('')
-     const [firstname, setFirstname] = useState('');
-     const [lastname, setLastname] = useState('');
-     const [userData, setUserData] = useState({});
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserDataContext);
 
-     const navigate = useNavigate();
-     const { user , setUser } = useContext(UserDataContext);
+  const validatePassword = (password) => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters.");
+      return false;
+    }
+    setPasswordError("");
+    return true;
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(""); // Reset errors
+    setLoading(true); // Start loading
 
-     const handleSubmit = async (e) => {
-            e.preventDefault();
-            const newUser ={
-                fullname: {
-                        firstname: firstname,
-                        lastname: lastname,
-                    },               
-                email: email,
-                password: password 
-                
-            }
+    // Validate fields
+    if (!firstname || !lastname || !email || !password) {
+      setError("All fields are required!");
+      setLoading(false);
+      return;
+    }
 
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser);
+    // Validate Password
+    if (!validatePassword(password)) {
+      setLoading(false);
+      return;
+    }
 
-            if(response.status === 201){
-                const data = response.data;
-                setUser(data.user);
-                localStorage.setItem('token', data.token);
-                navigate('/start');
-            }
+    const newUser = {
+      fullname: {
+        firstname,
+        lastname,
+      },
+      email,
+      password,
+    };
 
-            setFirstname('');
-            setLastname('');
-            setEmail('');
-            setPassword('');
-        }
-    
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/register`,
+        newUser
+      );
 
+      if (response.status === 201) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem("token", data.token);
+        navigate("/start");
+      }
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data.message || "Signup failed. Try again.");
+      } else {
+        setError("Network error. Please check your connection.");
+      }
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <div className='p-7 h-screen flex flex-col justify-between'>
-    <div>
-    <img className='w-16 mb-10' src="logo.png" />
-    <form onSubmit={(e) => {
-        handleSubmit(e)
-    }} >
+    <div className="p-7 h-screen flex flex-col justify-between">
+      <div>
+        <img className="w-16 mb-10" src="logo.png" alt="Logo" />
+        <form onSubmit={handleSubmit}>
+          <h3 className="text-lg font-medium mb-2">What's your name</h3>
+          <div className="flex gap-3 mb-5">
+            <input
+              className="bg-[#eeeeee] w-1/2 rounded px-4 py-2 text-lg placeholder:text-base"
+              type="text"
+              placeholder="Firstname"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
+            />
 
-        <h3 className='text-lg font-medium mb-2'>What's your name</h3>
-        <div className='flex gap-3 mb-5'>
-        <input 
-        className='bg-[#eeeeee] w-1/2 rounded px-4 py-2 text-lg placeholder:text-base' 
-        type="text" 
-        placeholder="firstname" 
-        value={firstname}
-        onChange={(e) => {setFirstname(e.target.value)}}
-        />
-        
-        <input 
-        className='bg-[#eeeeee] w-1/2 rounded px-4 py-2 text-lg placeholder:text-base' 
-        type="text" 
-        placeholder="lastname"
-        value={lastname}
-        onChange={ (e) => {
-            setLastname(e.target.value)
-        }}
-        />
-        </div>
+            <input
+              className="bg-[#eeeeee] w-1/2 rounded px-4 py-2 text-lg placeholder:text-base"
+              type="text"
+              placeholder="Lastname"
+              value={lastname}
+              onChange={(e) => setLastname(e.target.value)}
+            />
+          </div>
 
+          <h3 className="text-lg font-medium mb-2">What's your email</h3>
+          <input
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="bg-[#eeeeee] rounded px-4 py-2 w-full text-lg placeholder:text-base"
+            type="email"
+            placeholder="example@gmail.com"
+          />
 
-        <h3 className='text-lg font-medium mb-2'>What's your email</h3>
-        <input 
-        required
-        value={email}
-        onChange={(e) => {
-            setEmail(e.target.value)
-        }}
-        className='bg-[#eeeeee] rounded px-4 py-2 w-full text-lg placeholder:text-base' 
-        type="text" 
-        placeholder="example@gmail.com" />
+          <h3 className="text-lg font-medium mb-2 mt-4">Enter Password</h3>
+          <input
+            required
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              validatePassword(e.target.value);
+            }}
+            className="bg-[#eeeeee] mb-3 rounded px-4 py-2 w-full text-lg placeholder:text-base"
+            type="password"
+            placeholder="Password"
+          />
 
-        <h3 className='text-lg font-medium mb-2 mt-4'>Enter Password</h3>
-        <input 
-        required
-        value={password}
-        onChange={(e) => {
-            setPassword(e.target.value)
-        }}
-        className='bg-[#eeeeee] mb-3 rounded px-4 py-2 w-full text-lg placeholder:text-base'  
-        type="password" placeholder="Password" />
+          {/* Password Error Message */}
+          {passwordError && <p className="text-red-500 text-sm mb-3">{passwordError}</p>}
 
-        <button 
-        className='w-full px-4 py-2 rounded bg-[#c44e1d] font-semibold text-xl mb-3 text-white'>Sign up</button>
+          {/* General Error Message */}
+          {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
 
-    </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full px-4 py-2 rounded font-semibold text-xl mb-3 text-white ${
+              loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#c44e1d]"
+            }`}
+          >
+            {loading ? "Signing up..." : "Sign up"}
+          </button>
+        </form>
 
-    <p className='text-center mt-2'>
-            Already have a account? <Link to='/user-login' className='text-blue-600'>Login as User</Link>
+        <p className="text-center mt-2">
+          Already have an account?{" "}
+          <Link to="/user-login" className="text-blue-600">
+            Login as User
+          </Link>
         </p>
+      </div>
 
+      <div>
+        <p className="text-[10px] leading-tight">
+          By proceeding, you consent to get calls, WhatsApp, or SMS messages,
+          including by automated means, from Uber and its affiliates to the
+          number you provide.
+        </p>
+      </div>
     </div>
+  );
+};
 
-    <div>
-        <p className='text-[10px] leading-tight'>  By proceeding, you consent to get calls, WhatsApp or SMS
-            messages, including by automated means, from Uber and its affiliates to the number you provide.</p>
-
-    </div>
-    </div>
-  )
-}
-
-export default UserSignup
+export default UserSignup;
