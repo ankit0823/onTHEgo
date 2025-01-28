@@ -15,7 +15,7 @@ const RidePopUp = (props) => {
       </h5>
       <h3 className="text-2xl font-semibold mb-5">New Ride Available!</h3>
 
-      <div className="flex mt-4 p-3 bg-[#70c8dd] rounded-lg items-center justify-between">
+      <div className="flex mt-4 p-3 bg-[#bedeea] rounded-lg items-center justify-between">
         <div className="flex items-center gap-4">
           <img
             className="h-12 w-12 rounded-full object-cover"
@@ -31,7 +31,7 @@ const RidePopUp = (props) => {
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="text-lg ri-map-pin-fill"></i>
             <div>
-              <h3 className="text-lg font-medium">562/11-A</h3>
+              <h3 className="text-lg font-medium">pickUp</h3>
               <p className="text-sm -mt-1 text-gray-600">
                 {props.ride?.pickup}
               </p>
@@ -40,7 +40,7 @@ const RidePopUp = (props) => {
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="ri-map-pin-user-fill"></i>
             <div>
-              <h3 className="text-lg font-medium">562/11-A</h3>
+              <h3 className="text-lg font-medium">dropOff</h3>
               <p className="text-sm -mt-1 text-gray-600">
                 {props.ride?.destination}
               </p>
