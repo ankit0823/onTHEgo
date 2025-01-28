@@ -29,9 +29,9 @@ const DriverRiding = () => {
   return (
     <div className="h-screen">
       <div className="fixed flex items-center justify-between w-screen p-3">
-        <img
-          className="w-16 "
-          src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
+         <img
+          className="w-16 rounded-full"
+          src="go.webp"
         />
         <Link
           to="/driver-dashboard"
