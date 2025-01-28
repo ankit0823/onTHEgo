@@ -1,22 +1,28 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 
 const LookingForDriver = (props) => {
-
   const imgRef = useRef(null);
+  const [rides, setRides] = useState([]); // State to track all rides
 
   useEffect(() => {
     // Adding infinite rotation animation using GSAP
     gsap.to(imgRef.current, {
-      rotation: 360, // Rotate 360 degrees
-      duration: 5, // Duration for one full rotation
-      repeat: -1, // Infinite repeat
-      ease: "linear", // Smooth and continuous rotation
+      rotation: 360,
+      duration: 5,
+      repeat: -1,
+      ease: "linear",
     });
   }, []);
 
-
+  const handleCancelRide = () => {
+    // Find the ride to cancel based on its unique identifier
+    const rideToCancel = rides.find(ride => ride.id === props.ride?.id);
+    if (rideToCancel) {
+      setRides(rides.filter(ride => ride.id !== rideToCancel.id));
+    }
+  };
 
   return (
     <div>
@@ -54,7 +60,7 @@ const LookingForDriver = (props) => {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-5 p-3 ">
+          <div className="flex items-center gap-5 p-3">
             <i className="ri-bank-card-2-fill"></i>
             <div>
               <h3 className="text-lg font-medium">₹{props.fare[props.vehicleType]}</h3>
@@ -64,12 +70,18 @@ const LookingForDriver = (props) => {
             </div>
           </div>
         </div>
-        {/* <button className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg">
-          Confirm
-        </button> */}
       </div>
+
+      <button
+        onClick={() => {
+          props.setLookingForDriver(false)
+        }}
+        className="mt-8 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+      >
+        Cancel This Ride
+      </button>
     </div>
   );
-};
+}
 
 export default LookingForDriver;
