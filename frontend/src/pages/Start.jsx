@@ -13,6 +13,8 @@ import { useContext } from 'react'
 import { UserDataContext } from '../context/UserContext'
 import { Link, useNavigate } from 'react-router-dom'
 import LiveTracking from '../components/LiveTracking'
+import Sidebar from '../components/Sidebar'
+
 
 const Start = () => {
 
@@ -63,6 +65,8 @@ const Start = () => {
 
   socket.on('ride-started',ride =>{
     navigate('/riding', { state: { ride } })
+    console.log(ride);
+    
   })
 
   const handlePickupChange = async (e) => {
@@ -223,10 +227,7 @@ const Start = () => {
     <div className=' h-screen relative '>
       <div className='h-[65%]'>
         <div className="flex items-center justify-between w-screen p-2 bg-[#8298b7]">
-                <img
-                  className="w-10 text-[#66A5AD] rounded-full"
-                  src='logo.png'
-                />
+              <span className='-mt-4'> <Sidebar /></span>
                 <Link
                   to="/user-logout"
                   className="h-8 w-8 bg-white flex items-center justify-center rounded-full"
@@ -234,7 +235,7 @@ const Start = () => {
                   <i className="text-lg font-medium ri-logout-box-line"></i>
                 </Link>
               </div>
-        <div className='h-[400px]'>
+        <div className='h-[100%]'>
         <LiveTracking/>
         </div>
         {/* <div className='h-[40%]  bg-teal-300 '>
@@ -331,6 +332,7 @@ const Start = () => {
 
       <div ref={lookingForDriverRef} className='fixed z-10 bottom-0 w-full translate-y-full bg-[#C4C4C4] px-3 py-6 pt-12'>
         <LookingForDriver
+        ride ={ride}
         pickup = {pickup}
         destination = {destination}
         fare ={fare}
