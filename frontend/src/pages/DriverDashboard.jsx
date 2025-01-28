@@ -10,6 +10,8 @@ import { DriverDataContext } from "../context/DriverContext";
 import { SocketDataContext } from "../context/SocketContext";
 import axios from "axios";
 import LiveTracking from "../components/LiveTracking";
+import Sidebar from "../components/Sidebar";
+import DriverSidebar from "../components/DriverSidebar";
 
 const DriverDashboard = () => {
 
@@ -121,10 +123,7 @@ const [ride, setRide] = useState(null)
   return (
     <div className="h-screen">
       <div className="flex items-center bg-[#8298b7] justify-between w-screen p-2">
-        <img
-          className="w-8 rounded-full "
-          src="onthego.jpg"
-          />
+      <span className='-mt-4'> <DriverSidebar /></span>
         <Link
           to="/driver-logout"
           className="h-8 w-8 bg-white flex items-center justify-center rounded-full"
@@ -140,7 +139,7 @@ const [ride, setRide] = useState(null)
         <DriverData />
       </div>
       </div>
-      <div ref={ridePopupPanelRef}  className='fixed z-10 bottom-0 w-full -translate-x-full  bg-white px-3 py-6 pt-12'>
+      <div ref={ridePopupPanelRef}  className='fixed z-10 bottom-0 w-full -translate-x-full  bg-[#C4C4C4] px-3 py-6 pt-12'>
         <RidePopUp
         ride={ride}
         confirmRide={confirmRide}
