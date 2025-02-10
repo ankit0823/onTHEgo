@@ -107,6 +107,8 @@ const Start = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    setPickup("")
+    setDestination("")
   }
 
   useGSAP(function(){
